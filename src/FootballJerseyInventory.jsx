@@ -9,9 +9,12 @@ import {
   Image as ImageIcon,
   Lock,
   RotateCcw,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 const STORAGE_KEY = "football_jersey_inventory_v5";
+const THEME_STORAGE_KEY = "football_jersey_inventory_theme";
 const DB_NAME = "football_jersey_inventory_images_db";
 const DB_VERSION = 1;
 const IMAGE_STORE = "images";
@@ -294,6 +297,26 @@ function loadProducts() {
     return mergeMissingStarterProducts(parsed);
   } catch {
     return mergeMissingStarterProducts([]);
+  }
+}
+
+function loadThemeMode() {
+  if (typeof window === "undefined" || !window.localStorage) return "day";
+
+  try {
+    return window.localStorage.getItem(THEME_STORAGE_KEY) === "night" ? "night" : "day";
+  } catch {
+    return "day";
+  }
+}
+
+function saveThemeMode(themeMode) {
+  if (typeof window === "undefined" || !window.localStorage) return;
+
+  try {
+    window.localStorage.setItem(THEME_STORAGE_KEY, themeMode);
+  } catch (error) {
+    console.warn("Theme preference could not be saved locally:", error);
   }
 }
 
@@ -1182,13 +1205,19 @@ function runSelfTests() {
 
 export default function FootballJerseyInventory() {
   const [products, setProducts] = useState(loadProducts);
+  const [themeMode, setThemeMode] = useState(loadThemeMode);
   const [query, setQuery] = useState("");
   const [newProduct, setNewProduct] = useState({ player: "", team: "" });
   const [imageStatus, setImageStatus] = useState("");
+  const isNightMode = themeMode === "night";
 
   useEffect(() => {
     runSelfTests();
   }, []);
+
+  useEffect(() => {
+    saveThemeMode(themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     saveProducts(products);
@@ -1328,6 +1357,10 @@ export default function FootballJerseyInventory() {
   const resetQuantitiesOnly = () => {
     setProducts((current) => current.map(resetProductQuantities));
     setImageStatus("Quantities reset to 0. Photos and jersey details were kept.");
+  };
+
+  const toggleThemeMode = () => {
+    setThemeMode((current) => (current === "night" ? "day" : "night"));
   };
 
   const exportPhotoTableReport = async () => {
@@ -1478,7 +1511,9 @@ export default function FootballJerseyInventory() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f6f7fb] p-4 text-slate-900 sm:p-6">
+    <div
+      className={`theme-shell theme-${themeMode} relative min-h-screen overflow-hidden bg-[#f6f7fb] p-4 text-slate-900 sm:p-6`}
+    >
       <div className="air-background" aria-hidden="true">
         <span className="air-plane air-plane-one" />
         <span className="air-plane air-plane-two" />
@@ -1488,8 +1523,24 @@ export default function FootballJerseyInventory() {
         <header className="interactive-panel rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-sm font-bold text-white">
-                <Shirt className="h-4 w-4" /> Jersey Inventory
+              <div className="mb-2 flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-sm font-bold text-white">
+                  <Shirt className="h-4 w-4" /> Jersey Inventory
+                </div>
+                <button
+                  type="button"
+                  onClick={toggleThemeMode}
+                  className="theme-toggle inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-2 py-1.5 text-sm font-black text-slate-800 shadow-sm"
+                  aria-label={`Switch to ${isNightMode ? "day" : "night"} mood`}
+                  aria-pressed={isNightMode}
+                >
+                  <span className="theme-toggle-track" aria-hidden="true">
+                    <span className="theme-toggle-thumb">
+                      {isNightMode ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
+                    </span>
+                  </span>
+                  <span>{isNightMode ? "Night" : "Day"}</span>
+                </button>
               </div>
               <h1 className="text-2xl font-black tracking-tight sm:text-3xl">Football Jersey Stock</h1>
               <p className="mt-1 text-sm font-semibold text-slate-500">

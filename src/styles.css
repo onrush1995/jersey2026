@@ -383,3 +383,182 @@ input:focus {
   margin: 0;
   appearance: none;
 }
+
+.theme-shell,
+.air-background,
+.air-background::before,
+.air-background::after,
+.air-plane,
+.interactive-panel,
+.jersey-card {
+  transition:
+    background 260ms ease,
+    background-color 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    color 260ms ease,
+    opacity 260ms ease;
+}
+
+.theme-toggle {
+  min-height: 36px;
+}
+
+.theme-toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 42px;
+  height: 22px;
+  padding: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fde68a, #bfdbfe);
+  box-shadow: inset 0 0 0 1px rgb(15 23 42 / 0.14);
+}
+
+.theme-toggle-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  color: #0f172a;
+  background: white;
+  box-shadow: 0 1px 4px rgb(15 23 42 / 0.24);
+  transform: translateX(0);
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.theme-night {
+  color: #e5edf7;
+  background: #07111f;
+  color-scheme: dark;
+}
+
+.theme-night .air-background {
+  background:
+    radial-gradient(circle at 20% 10%, rgb(56 189 248 / 0.18), transparent 32%),
+    linear-gradient(180deg, #06101e 0%, #0b1728 48%, #030712 100%);
+}
+
+.theme-night .air-background::before {
+  opacity: 0.88;
+  background:
+    linear-gradient(115deg, transparent 0 18%, rgb(148 163 184 / 0.2) 18.5% 21%, transparent 21.5%),
+    repeating-linear-gradient(101deg, rgb(125 211 252 / 0.14) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(8deg, rgb(59 130 246 / 0.12) 0 1px, transparent 1px 132px);
+}
+
+.theme-night .air-background::after {
+  background: linear-gradient(
+    96deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.08) 38%,
+    rgb(96 165 250 / 0.22) 52%,
+    transparent 76%
+  );
+}
+
+.theme-night .air-plane {
+  border-color: rgb(125 211 252 / 0.18);
+  background:
+    linear-gradient(135deg, rgb(15 23 42 / 0.78), rgb(14 116 144 / 0.22) 48%, rgb(2 6 23 / 0.38)),
+    repeating-linear-gradient(90deg, rgb(226 232 240 / 0.08) 0 1px, transparent 1px 58px);
+  box-shadow:
+    0 24px 64px rgb(0 0 0 / 0.34),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+  opacity: 0.62;
+}
+
+.theme-night .air-plane::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 70px, rgb(255 255 255 / 0.08) 71px 73px),
+    linear-gradient(95deg, rgb(125 211 252 / 0.12), transparent 42%, rgb(59 130 246 / 0.12));
+}
+
+.theme-night .air-plane::after {
+  background: linear-gradient(115deg, transparent 20%, rgb(191 219 254 / 0.18) 48%, transparent 62%);
+}
+
+.theme-night .interactive-panel,
+.theme-night .jersey-card {
+  background: rgb(15 23 42 / 0.9);
+  border-color: rgb(71 85 105 / 0.74);
+  box-shadow: 0 18px 46px rgb(2 6 23 / 0.34);
+}
+
+.theme-night .bg-white {
+  background-color: rgb(15 23 42 / 0.9);
+}
+
+.theme-night .bg-slate-50,
+.theme-night .bg-slate-100 {
+  background-color: rgb(30 41 59 / 0.72);
+}
+
+.theme-night .bg-slate-900 {
+  background-color: #e5edf7;
+  color: #07111f;
+}
+
+.theme-night .text-slate-900,
+.theme-night .text-slate-800,
+.theme-night .text-slate-700 {
+  color: #e5edf7;
+}
+
+.theme-night .text-slate-600,
+.theme-night .text-slate-500,
+.theme-night .text-slate-400 {
+  color: #aebcd0;
+}
+
+.theme-night .border-slate-200,
+.theme-night .border-slate-300,
+.theme-night .border-slate-900 {
+  border-color: rgb(71 85 105 / 0.78);
+}
+
+.theme-night input {
+  color: #e5edf7;
+  background-color: rgb(15 23 42 / 0.68);
+}
+
+.theme-night input::placeholder {
+  color: #8190a6;
+}
+
+.theme-night button:hover {
+  box-shadow: 0 10px 24px rgb(2 6 23 / 0.24);
+}
+
+.theme-night .theme-toggle {
+  background: rgb(15 23 42 / 0.76);
+  border-color: rgb(96 165 250 / 0.34);
+  color: #e5edf7;
+}
+
+.theme-night .theme-toggle-track {
+  background: linear-gradient(90deg, #1e293b, #2563eb);
+}
+
+.theme-night .theme-toggle-thumb {
+  color: #bfdbfe;
+  background: #020617;
+  transform: translateX(20px);
+}
+
+.theme-night .size-tile {
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.4),
+    0 8px 20px rgb(2 6 23 / 0.18);
+}
+
+.theme-night .size-input {
+  color: var(--size-text);
+  background: rgb(255 255 255 / 0.82);
+}
