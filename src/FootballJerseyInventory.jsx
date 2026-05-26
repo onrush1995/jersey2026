@@ -578,7 +578,7 @@ function buildPhotoSpreadsheetMHTML(products, imageDataById = new Map()) {
     th { background: #0f172a; color: white; font-size: 16px; padding: 10px; text-align: left; }
     td { border: 1px solid #cbd5e1; font-size: 15px; font-weight: 700; padding: 10px; vertical-align: middle; }
     .photo-cell { width: 150px; height: 150px; text-align: center; }
-    img { width: 130px; height: 130px; object-fit: cover; display: block; margin: 0 auto; }
+    img { width: 130px; height: 130px; object-fit: contain; display: block; margin: 0 auto; background: white; }
     .number { text-align: center; font-size: 18px; font-weight: 900; }
     .size-heading { text-align: center; border-left: 4px solid rgba(255, 255, 255, 0.75); }
     .size-data { border: 2px solid; min-width: 98px; }
@@ -684,7 +684,7 @@ function buildPhotoTableReportHTML(products, imageDataById = new Map()) {
     tbody tr:nth-child(even) { background: #f8fafc; }
     .photo-cell { height: 250px; text-align: center; }
     .player-cell { color: #0f172a; font-size: 28px; font-weight: 900; }
-    img { width: 218px; height: 218px; object-fit: cover; display: block; margin: 0 auto; border-radius: 16px; background: white; }
+    img { width: 218px; height: 218px; object-fit: contain; display: block; margin: 0 auto; border-radius: 16px; background: white; }
     .number { text-align: center; font-weight: 900; }
     .size-list-cell { min-width: 760px; }
     .download-size-badge { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-width: 250px; min-height: 150px; margin: 18px 14px; padding: 20px 24px 20px 32px; background: var(--size-bg); border: 5px solid var(--size-border); border-left: 18px solid var(--size-accent); border-radius: 999px; color: var(--size-text); }
@@ -1426,8 +1426,8 @@ export default function FootballJerseyInventory() {
     .summary-label { font-size: 22px; font-weight: 800; color: #475569; }
     .summary-number { font-size: 72px; font-weight: 900; line-height: 1; }
     .card { display: grid; grid-template-columns: 260px 1fr; gap: 24px; page-break-inside: avoid; }
-    .photo-wrap { width: 260px; min-height: 260px; background: #e2e8f0; border-radius: 22px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .photo { width: 100%; height: 260px; object-fit: cover; display: block; }
+    .photo-wrap { width: 260px; min-height: 260px; background: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .photo { width: 100%; height: 260px; object-fit: contain; display: block; background: white; }
     .photo-placeholder { font-size: 30px; font-weight: 900; color: #64748b; }
     .player { font-size: 48px; font-weight: 900; line-height: 1; }
     .sizes { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 18px; }
@@ -1600,12 +1600,12 @@ export default function FootballJerseyInventory() {
             return (
               <article key={safeItem.id} className="jersey-card overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                 <div className="grid gap-0 md:grid-cols-[180px_1fr]">
-                  <div className="flex min-h-[180px] items-center justify-center overflow-hidden bg-slate-100 p-3">
+                  <div className="flex min-h-[260px] items-center justify-center overflow-hidden bg-white p-3">
                     {safeItem.imagePreview ? (
                       <img
                         src={safeItem.imagePreview}
                         alt={`${safeItem.player} ${safeItem.team}`}
-                        className="jersey-photo h-full max-h-[220px] w-full rounded-md object-cover"
+                        className="jersey-photo h-[240px] max-h-[260px] w-full rounded-md object-contain"
                       />
                     ) : (
                       <div className="text-center text-slate-500">
