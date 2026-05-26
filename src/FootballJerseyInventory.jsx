@@ -21,6 +21,7 @@ const MESSI_EXTRA_SIZES = ["128", "122"];
 const FIXED_QUALITY = "Player version";
 const CSV_NEWLINE = "\n";
 const UTF8_BOM = "\uFEFF";
+const APP_BASE_URL = import.meta.env.BASE_URL || "./";
 const PIE_COLORS = [
   "#0f172a",
   "#2563eb",
@@ -47,6 +48,47 @@ const SIZE_COLORS = {
   122: { bg: "#ecfccb", border: "#bef264", text: "#365314", accent: "#65a30d" },
 };
 const DEFAULT_SIZE_COLORS = { bg: "#f1f5f9", border: "#cbd5e1", text: "#0f172a", accent: "#475569" };
+const PERMANENT_PHOTO_CATALOG = [
+  {
+    id: "messi-argentina",
+    playerMatch: "messi",
+    teamMatch: "argentina",
+    imageName: "messi-argentina.png",
+    imagePath: "jerseys/messi-argentina.png",
+  },
+];
+
+function getBundledAssetPath(assetPath) {
+  const base = APP_BASE_URL.endsWith("/") ? APP_BASE_URL : `${APP_BASE_URL}/`;
+  return `${base}${String(assetPath || "").replace(/^\/+/, "")}`;
+}
+
+function getPermanentCatalogEntry(product = {}) {
+  const player = String(product.player || "").trim().toLowerCase();
+  const team = String(product.team || "").trim().toLowerCase();
+  const imageName = String(product.imageName || "").trim().toLowerCase();
+
+  return (
+    PERMANENT_PHOTO_CATALOG.find(
+      (entry) =>
+        imageName === entry.imageName ||
+        (player.includes(entry.playerMatch) && team.includes(entry.teamMatch))
+    ) || null
+  );
+}
+
+function getPermanentCatalogId(product = {}) {
+  return getPermanentCatalogEntry(product)?.id || "";
+}
+
+function getBundledProductImage(product = {}) {
+  const catalogEntry = getPermanentCatalogEntry(product);
+  return catalogEntry ? getBundledAssetPath(catalogEntry.imagePath) : "";
+}
+
+function getBundledProductImageName(product = {}) {
+  return getPermanentCatalogEntry(product)?.imageName || "";
+}
 
 function getSizesForPlayer(playerName = "") {
   const player = String(playerName).toLowerCase();
@@ -129,16 +171,18 @@ function getStockTotal(stock, sizes = BASE_SIZES) {
 function normalizeProduct(product = {}) {
   const player = product.player || "Unknown Player";
   const sizes = getSizesForPlayer(player);
+  const bundledImagePreview = getBundledProductImage({ ...product, player });
+  const bundledImageName = getBundledProductImageName({ ...product, player });
 
   return {
     id: product.id || makeId(),
     player,
     team: product.team || "Unknown Team",
     quality: FIXED_QUALITY,
-    imagePreview: product.imagePreview || product.image || "",
-    imageName: product.imageName || "",
+    imagePreview: product.imagePreview || product.image || bundledImagePreview,
+    imageName: product.imageName || bundledImageName,
     hasStoredImage: Boolean(
-      product.hasStoredImage || product.imageName || product.imagePreview || product.image
+      product.hasStoredImage || product.imageName || product.imagePreview || product.image || bundledImagePreview
     ),
     stock: normalizeStock(product.stock, sizes),
   };
@@ -192,6 +236,14 @@ function productKey(product) {
   return `${safeProduct.player.trim().toLowerCase()}-${safeProduct.team.trim().toLowerCase()}`;
 }
 
+function productsMatchIdentity(a, b) {
+  const permanentCatalogA = getPermanentCatalogId(a);
+  const permanentCatalogB = getPermanentCatalogId(b);
+
+  if (permanentCatalogA && permanentCatalogA === permanentCatalogB) return true;
+  return productKey(a) === productKey(b);
+}
+
 function getProductSortRank(product) {
   const player = normalizeProduct(product).player.trim().toLowerCase();
 
@@ -213,47 +265,17 @@ function sortProductsByPriority(products) {
 
 const starterProducts = [
   normalizeProduct({
-    player: "Lamine Yamal",
-    team: "Spain",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
-  }),
-  normalizeProduct({
-    player: "Lamine Yamal",
-    team: "Barcelona",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
-  }),
-  normalizeProduct({
-    player: "Messi 10",
+    id: "permanent-messi-argentina",
+    player: "Messi",
     team: "Argentina",
     stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0, 128: 0, 122: 0 },
-  }),
-  normalizeProduct({
-    player: "Ronaldo",
-    team: "Al-Naseer",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
-  }),
-  normalizeProduct({
-    player: "Ronaldo",
-    team: "Portugal",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
-  }),
-  normalizeProduct({
-    player: "Mbappé",
-    team: "Black",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
-  }),
-  normalizeProduct({
-    player: "Mbappé",
-    team: "Blue",
-    stock: { L: 0, M: 0, S: 0, 152: 0, 146: 0, 140: 0, 134: 0 },
   }),
 ];
 
 function mergeMissingStarterProducts(savedProducts) {
   const safeSavedProducts = savedProducts.map(normalizeProduct);
-  const savedKeys = new Set(safeSavedProducts.map(productKey));
   const missingStarterProducts = starterProducts.filter(
-    (product) => !savedKeys.has(productKey(product))
+    (product) => !safeSavedProducts.some((savedProduct) => productsMatchIdentity(savedProduct, product))
   );
 
   return sortProductsByPriority([...missingStarterProducts, ...safeSavedProducts]);
@@ -269,7 +291,7 @@ function loadProducts() {
     const parsed = JSON.parse(saved);
     if (!Array.isArray(parsed)) return mergeMissingStarterProducts([]);
 
-    return sortProductsByPriority(parsed.map(normalizeProduct));
+    return mergeMissingStarterProducts(parsed);
   } catch {
     return mergeMissingStarterProducts([]);
   }
@@ -370,6 +392,39 @@ function readFileAsDataUrl(file) {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function fetchImageAsDataUrl(imageUrl) {
+  if (!imageUrl || String(imageUrl).startsWith("data:")) return imageUrl || "";
+
+  try {
+    const response = await fetch(imageUrl);
+    if (!response.ok) return imageUrl;
+    return await blobToDataUrl(await response.blob());
+  } catch (error) {
+    console.warn("Bundled photo could not be embedded in the report:", error);
+    return imageUrl;
+  }
+}
+
+async function getProductPhotoDataUrl(product) {
+  const safeProduct = normalizeProduct(product);
+
+  if (safeProduct.imagePreview?.startsWith("data:")) return safeProduct.imagePreview;
+
+  const storedImage = safeProduct.hasStoredImage ? await getImageFromDatabase(safeProduct.id) : "";
+  if (storedImage) return storedImage;
+
+  return safeProduct.imagePreview ? fetchImageAsDataUrl(safeProduct.imagePreview) : "";
 }
 
 function escapeCSVCell(value) {
@@ -1067,18 +1122,22 @@ function runSelfTests() {
       pass: () => !getSizesForPlayer("Ronaldo").includes("128") && !getSizesForPlayer("Ronaldo").includes("122"),
     },
     {
-      name: "starter products include requested jerseys",
+      name: "starter products include the bundled permanent photo card",
       pass: () => {
-        const keys = new Set(starterProducts.map(productKey));
-        return keys.has("messi 10-argentina") && keys.has("ronaldo-al-naseer") && keys.has("mbappé-black") && keys.has("mbappé-blue");
+        const starter = starterProducts[0];
+        return (
+          starterProducts.length === 1 &&
+          productKey(starter) === "messi-argentina" &&
+          starter.imagePreview.includes("jerseys/messi-argentina.png")
+        );
       },
     },
     {
-      name: "starter products are ordered Lamine, Messi, Ronaldo, then rest",
-      pass: () => {
-        const orderedPlayers = sortProductsByPriority(starterProducts).map((product) => product.player);
-        return orderedPlayers[0] === "Lamine Yamal" && orderedPlayers[2] === "Messi 10" && orderedPlayers[3] === "Ronaldo";
-      },
+      name: "bundled photo restores after lightweight storage",
+      pass: () =>
+        normalizeProduct({ player: "Messi", team: "Argentina", imageName: "messi-argentina.png", hasStoredImage: true }).imagePreview.includes(
+          "jerseys/messi-argentina.png"
+        ),
     },
     {
       name: "saved products are displayed in priority order",
@@ -1094,7 +1153,10 @@ function runSelfTests() {
     },
     {
       name: "mergeMissingStarterProducts adds starter products without duplicating saved products",
-      pass: () => mergeMissingStarterProducts([{ player: "Messi 10", team: "Argentina" }]).filter((product) => productKey(product) === "messi 10-argentina").length === 1,
+      pass: () =>
+        mergeMissingStarterProducts([{ player: "Messi 10", team: "Argentina" }]).filter(
+          (product) => getPermanentCatalogId(product) === "messi-argentina"
+        ).length === 1,
     },
     {
       name: "resetProductQuantities keeps photos and resets only stock numbers",
@@ -1274,8 +1336,7 @@ export default function FootballJerseyInventory() {
     const imageEntries = await Promise.all(
       safeProducts.map(async (item) => {
         const safeItem = normalizeProduct(item);
-        const photoDataUrl =
-          safeItem.imagePreview || (safeItem.hasStoredImage ? await getImageFromDatabase(safeItem.id) : "");
+        const photoDataUrl = await getProductPhotoDataUrl(safeItem);
         return [safeItem.id, photoDataUrl];
       })
     );
@@ -1301,8 +1362,7 @@ export default function FootballJerseyInventory() {
         const productSizes = getSizesForPlayer(safeItem.player);
         const safeStock = normalizeStock(safeItem.stock, productSizes);
         const totalForJersey = getStockTotal(safeStock, productSizes);
-        const storedImage =
-          safeItem.imagePreview || (safeItem.hasStoredImage ? await getImageFromDatabase(safeItem.id) : "");
+        const storedImage = await getProductPhotoDataUrl(safeItem);
 
         return {
           ...safeItem,
@@ -1474,7 +1534,9 @@ export default function FootballJerseyInventory() {
               <Plus className="h-5 w-5" /> Add
             </button>
           </div>
-          <p className="mt-2 text-sm font-semibold text-slate-500">Photos are saved in this browser.</p>
+          <p className="mt-2 text-sm font-semibold text-slate-500">
+            Default photos are built into the app. New uploads are saved in this browser.
+          </p>
           {imageStatus && (
             <p className="mt-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-700">
               {imageStatus}
