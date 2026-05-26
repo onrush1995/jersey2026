@@ -1478,7 +1478,7 @@ export default function FootballJerseyInventory() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f7fb] p-4 text-slate-900 sm:p-6">
+    <div className="relative min-h-screen overflow-hidden bg-[#f6f7fb] p-4 text-slate-900 sm:p-6">
       <div className="air-background" aria-hidden="true">
         <span className="air-plane air-plane-one" />
         <span className="air-plane air-plane-two" />

@@ -3,11 +3,220 @@
 @tailwind utilities;
 
 html {
-  background: #f1f5f9;
+  background: #edf3f8;
 }
 
 body {
   margin: 0;
+}
+
+.air-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, #f8fbff 0%, #eef5f9 48%, #f7fafc 100%),
+    linear-gradient(115deg, rgb(14 165 233 / 0.08), transparent 40%, rgb(15 23 42 / 0.05));
+}
+
+.air-background::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  opacity: 0.82;
+  background:
+    linear-gradient(115deg, transparent 0 18%, rgb(255 255 255 / 0.82) 18.5% 21%, transparent 21.5%),
+    repeating-linear-gradient(101deg, rgb(15 23 42 / 0.055) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(8deg, rgb(8 145 178 / 0.07) 0 1px, transparent 1px 132px);
+  transform: translate3d(-2%, -1%, 0) skewY(-5deg);
+  animation: air-facade-drift 28s ease-in-out infinite alternate;
+}
+
+.air-background::after {
+  content: "";
+  position: absolute;
+  left: -28%;
+  top: 8%;
+  width: 156%;
+  height: 40%;
+  background: linear-gradient(
+    96deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.74) 38%,
+    rgb(125 211 252 / 0.18) 52%,
+    transparent 76%
+  );
+  transform: rotate(-8deg);
+  animation: air-light-sweep 18s ease-in-out infinite;
+}
+
+.air-plane {
+  position: absolute;
+  display: block;
+  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+  border: 1px solid rgb(148 163 184 / 0.26);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.76), rgb(224 242 254 / 0.32) 46%, rgb(15 23 42 / 0.04)),
+    repeating-linear-gradient(90deg, rgb(15 23 42 / 0.055) 0 1px, transparent 1px 58px);
+  box-shadow:
+    0 22px 56px rgb(15 23 42 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.84);
+  opacity: 0.72;
+  backdrop-filter: blur(16px);
+}
+
+.air-plane::before,
+.air-plane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.air-plane::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 70px, rgb(255 255 255 / 0.52) 71px 73px),
+    linear-gradient(95deg, rgb(255 255 255 / 0.58), transparent 42%, rgb(14 165 233 / 0.1));
+}
+
+.air-plane::after {
+  background: linear-gradient(115deg, transparent 20%, rgb(255 255 255 / 0.7) 48%, transparent 62%);
+  transform: translateX(-80%);
+  animation: air-panel-glint 11s ease-in-out infinite;
+}
+
+.air-plane-one {
+  top: 5vh;
+  right: -10vw;
+  width: min(58vw, 780px);
+  height: 82vh;
+  animation: air-panel-float-one 24s ease-in-out infinite alternate;
+}
+
+.air-plane-two {
+  top: 16vh;
+  left: -16vw;
+  width: min(44vw, 560px);
+  height: 78vh;
+  opacity: 0.5;
+  animation: air-panel-float-two 30s ease-in-out infinite alternate;
+}
+
+.air-plane-three {
+  right: 18vw;
+  bottom: -24vh;
+  width: min(48vw, 680px);
+  height: 46vh;
+  opacity: 0.43;
+  animation: air-panel-float-three 26s ease-in-out infinite alternate;
+}
+
+.interactive-panel,
+.jersey-card {
+  background: rgb(255 255 255 / 0.9);
+  border-color: rgb(203 213 225 / 0.76);
+  backdrop-filter: blur(18px);
+}
+
+@keyframes air-facade-drift {
+  from {
+    transform: translate3d(-4%, -2%, 0) skewY(-5deg);
+  }
+
+  to {
+    transform: translate3d(3%, 2%, 0) skewY(-2deg);
+  }
+}
+
+@keyframes air-light-sweep {
+  0%,
+  100% {
+    transform: translateX(-14%) rotate(-8deg);
+    opacity: 0.22;
+  }
+
+  45% {
+    transform: translateX(12%) rotate(-8deg);
+    opacity: 0.62;
+  }
+}
+
+@keyframes air-panel-glint {
+  0%,
+  35% {
+    transform: translateX(-90%);
+    opacity: 0;
+  }
+
+  58% {
+    opacity: 0.62;
+  }
+
+  100% {
+    transform: translateX(96%);
+    opacity: 0;
+  }
+}
+
+@keyframes air-panel-float-one {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-7deg);
+  }
+
+  to {
+    transform: translate3d(-3vw, 2vh, 0) rotate(-4deg);
+  }
+}
+
+@keyframes air-panel-float-two {
+  from {
+    transform: translate3d(0, 1vh, 0) rotate(8deg);
+  }
+
+  to {
+    transform: translate3d(4vw, -2vh, 0) rotate(5deg);
+  }
+}
+
+@keyframes air-panel-float-three {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
+  }
+
+  to {
+    transform: translate3d(2vw, -3vh, 0) rotate(2deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .air-background::before {
+    opacity: 0.58;
+  }
+
+  .air-plane-one {
+    right: -38vw;
+    width: 95vw;
+  }
+
+  .air-plane-two {
+    left: -48vw;
+    width: 90vw;
+  }
+
+  .air-plane-three {
+    right: -10vw;
+    width: 86vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .air-background::before,
+  .air-background::after,
+  .air-plane,
+  .air-plane::after {
+    animation: none;
+  }
 }
 
 button,
