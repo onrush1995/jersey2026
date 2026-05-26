@@ -811,33 +811,31 @@ function LiveStockPieChart({ pieData, totalStock }) {
   const animationKey = pieData.map((item) => `${item.label}:${item.value}`).join("|");
 
   return (
-    <section className="interactive-panel rounded-3xl bg-white p-5 shadow-lg hover:shadow-xl sm:p-6">
+    <section className="interactive-panel rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <style>{`
         @keyframes livePieDraw {
           from { stroke-dasharray: 0 100; }
         }
       `}</style>
-      <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 className="text-3xl font-black">Live Stock Pie Chart</h2>
-          <p className="mt-1 text-lg font-semibold text-slate-600">
-            Updates automatically from the quantity inputs below.
-          </p>
+          <h2 className="text-lg font-black">Stock Share</h2>
+          <p className="mt-1 text-sm font-semibold text-slate-500">Updates from the quantity inputs.</p>
         </div>
-        <div className="inline-flex w-fit items-center rounded-full bg-slate-900 px-5 py-2 text-2xl font-black text-white">
+        <div className="inline-flex w-fit items-center rounded-full bg-slate-900 px-3 py-1.5 text-sm font-black text-white">
           Total: {totalStock}
         </div>
       </div>
 
       {pieData.length > 0 ? (
-        <div className="grid gap-6 lg:grid-cols-[340px_1fr] lg:items-center">
+        <div className="grid gap-4 lg:grid-cols-[240px_1fr] lg:items-center">
           <div className="flex justify-center">
             <svg
               key={animationKey}
               viewBox="0 0 200 200"
               role="img"
               aria-label="Live stock pie chart"
-              className="aspect-square w-full max-w-[340px] overflow-visible"
+              className="aspect-square w-full max-w-[240px] overflow-visible"
             >
               <circle cx="100" cy="100" r="70" fill="transparent" stroke="#e2e8f0" strokeWidth="40" />
               {pieData.map((item, index) => (
@@ -872,16 +870,16 @@ function LiveStockPieChart({ pieData, totalStock }) {
             </svg>
           </div>
 
-          <div className="grid max-h-[360px] gap-3 overflow-y-auto pr-1">
+          <div className="grid max-h-[260px] gap-2 overflow-y-auto pr-1">
             {pieData.map((item) => (
               <div
                 key={item.label}
-                className="chart-legend-row grid grid-cols-[18px_1fr_auto] items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3"
+                className="chart-legend-row grid grid-cols-[14px_1fr_auto] items-center gap-2 rounded-md bg-slate-50 px-3 py-2"
                 style={{ "--legend-color": item.color }}
               >
-                <span className="h-4 w-4 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="min-w-0 truncate text-lg font-black text-slate-700">{item.label}</span>
-                <span className="whitespace-nowrap text-lg font-black text-slate-900">
+                <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="min-w-0 truncate text-sm font-black text-slate-700">{item.label}</span>
+                <span className="whitespace-nowrap text-sm font-black text-slate-900">
                   {item.value} ({item.percentage.toFixed(1)}%)
                 </span>
               </div>
@@ -889,9 +887,9 @@ function LiveStockPieChart({ pieData, totalStock }) {
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl bg-slate-100 p-8 text-center">
-          <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center rounded-full border-[18px] border-slate-300 bg-white" />
-          <p className="text-2xl font-black text-slate-700">Add quantities to see the pie chart animate.</p>
+        <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 p-5 text-center">
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border-[10px] border-slate-300 bg-white" />
+          <p className="text-sm font-black text-slate-600">Add quantities to see the chart.</p>
         </div>
       )}
     </section>
@@ -1420,104 +1418,116 @@ export default function FootballJerseyInventory() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-4 text-slate-900 sm:p-8">
-      <div className="mx-auto max-w-7xl space-y-6">
-        <header className="interactive-panel rounded-3xl bg-white p-6 shadow-lg hover:shadow-xl sm:p-8">
+    <div className="min-h-screen bg-[#f6f7fb] p-4 text-slate-900 sm:p-6">
+      <div className="air-background" aria-hidden="true">
+        <span className="air-plane air-plane-one" />
+        <span className="air-plane air-plane-two" />
+        <span className="air-plane air-plane-three" />
+      </div>
+      <div className="relative z-10 mx-auto max-w-screen-2xl space-y-5">
+        <header className="interactive-panel rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-lg font-bold text-white">
-                <Shirt className="h-6 w-6" /> Jersey Inventory
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1.5 text-sm font-bold text-white">
+                <Shirt className="h-4 w-4" /> Jersey Inventory
               </div>
-              <h1 className="text-4xl font-black tracking-tight sm:text-6xl">Football Jersey Stock</h1>
-              <p className="mt-3 text-xl font-semibold text-slate-600">
-                Add unlimited jersey styles, upload photos, track all sizes, and export everything as CSV.
+              <h1 className="text-2xl font-black tracking-tight sm:text-3xl">Football Jersey Stock</h1>
+              <p className="mt-1 text-sm font-semibold text-slate-500">
+                Track photos, sizes, and stock in one simple workspace.
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:min-w-[340px]">
-              <div className="rounded-2xl bg-slate-100 p-5 text-center">
-                <p className="text-lg font-bold text-slate-500">Total Styles</p>
-                <p className="text-5xl font-black">{totalStyles}</p>
+            <div className="grid grid-cols-2 gap-2 sm:min-w-[260px]">
+              <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-center">
+                <p className="text-xs font-bold uppercase text-slate-500">Styles</p>
+                <p className="text-3xl font-black">{totalStyles}</p>
               </div>
-              <div className="rounded-2xl bg-slate-100 p-5 text-center">
-                <p className="text-lg font-bold text-slate-500">Total Stock</p>
-                <p className="text-5xl font-black">{totalJerseys}</p>
+              <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-center">
+                <p className="text-xs font-bold uppercase text-slate-500">Stock</p>
+                <p className="text-3xl font-black">{totalJerseys}</p>
               </div>
             </div>
           </div>
         </header>
 
-        <section className="interactive-panel rounded-3xl bg-white p-5 shadow-lg hover:shadow-xl sm:p-6">
-          <h2 className="mb-4 text-3xl font-black">Add New Jersey</h2>
-          <div className="grid gap-4 lg:grid-cols-[1fr_1fr_180px]">
+        <section className="interactive-panel rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="text-base font-black">Add Jersey</h2>
+          </div>
+          <div className="grid gap-3 lg:grid-cols-[1fr_1fr_140px]">
             <input
               value={newProduct.player}
               onChange={(e) => setNewProduct((p) => ({ ...p, player: e.target.value }))}
               placeholder="Player name, e.g. Messi"
-              className="rounded-2xl border-2 border-slate-200 px-5 py-4 text-2xl font-bold outline-none focus:border-slate-900"
+              className="rounded-md border border-slate-300 px-3 py-2.5 text-base font-bold outline-none focus:border-slate-900"
             />
             <input
               value={newProduct.team}
               onChange={(e) => setNewProduct((p) => ({ ...p, team: e.target.value }))}
               placeholder="Team, e.g. Argentina"
-              className="rounded-2xl border-2 border-slate-200 px-5 py-4 text-2xl font-bold outline-none focus:border-slate-900"
+              className="rounded-md border border-slate-300 px-3 py-2.5 text-base font-bold outline-none focus:border-slate-900"
             />
             <button
               onClick={addProduct}
-              className="flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-4 text-2xl font-black text-white hover:bg-slate-700"
+              className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-base font-black text-white hover:bg-slate-700"
             >
-              <Plus className="h-7 w-7" /> Add
+              <Plus className="h-5 w-5" /> Add
             </button>
           </div>
-          <p className="mt-3 text-lg font-semibold text-slate-500">
-            There is no fixed product limit. Photos are saved in browser image storage, while CSV export stays fast and clean.
-          </p>
+          <p className="mt-2 text-sm font-semibold text-slate-500">Photos are saved in this browser.</p>
           {imageStatus && (
-            <p className="mt-3 rounded-2xl bg-slate-100 px-4 py-3 text-lg font-black text-slate-700">
+            <p className="mt-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-700">
               {imageStatus}
             </p>
           )}
         </section>
 
-        <section className="interactive-panel flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-lg hover:shadow-xl sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <section className="interactive-panel flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm xl:flex-row xl:items-center xl:justify-between">
           <div className="relative flex-1">
-            <Search className="absolute left-5 top-1/2 h-7 w-7 -translate-y-1/2 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by player, team or quality"
-              className="w-full rounded-2xl border-2 border-slate-200 py-4 pl-16 pr-5 text-2xl font-bold outline-none focus:border-slate-900"
+              className="w-full rounded-md border border-slate-300 py-2.5 pl-10 pr-3 text-base font-bold outline-none focus:border-slate-900"
             />
           </div>
           <button
             onClick={exportPhotoTableReport}
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-900 px-5 py-4 text-2xl font-black hover:bg-slate-900 hover:text-white"
+            className="flex items-center justify-center gap-2 rounded-md border border-slate-900 px-3 py-2.5 text-sm font-black hover:bg-slate-900 hover:text-white"
           >
-            <Download className="h-7 w-7" /> Photo Table Report
+            <Download className="h-5 w-5" /> Photo Table
           </button>
           <button
             onClick={exportVisualReport}
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-slate-900 px-5 py-4 text-2xl font-black hover:bg-slate-900 hover:text-white"
+            className="flex items-center justify-center gap-2 rounded-md border border-slate-900 px-3 py-2.5 text-sm font-black hover:bg-slate-900 hover:text-white"
           >
-            <Download className="h-7 w-7" /> Pie Chart Report
+            <Download className="h-5 w-5" /> Pie Report
           </button>
           <button
             onClick={resetQuantitiesOnly}
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-red-200 px-5 py-4 text-xl font-black text-red-600 hover:bg-red-50"
+            className="flex items-center justify-center gap-2 rounded-md border border-red-200 px-3 py-2.5 text-sm font-black text-red-600 hover:bg-red-50"
           >
-            <RotateCcw className="h-6 w-6" /> Reset Quantity
+            <RotateCcw className="h-5 w-5" /> Reset
           </button>
           <button
             onClick={deleteNoPictureProducts}
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-red-300 px-5 py-4 text-xl font-black text-red-700 hover:bg-red-600 hover:text-white"
+            className="flex items-center justify-center gap-2 rounded-md border border-red-300 px-3 py-2.5 text-sm font-black text-red-700 hover:bg-red-600 hover:text-white"
           >
-            <Trash2 className="h-6 w-6" /> Delete No-Picture Cards
+            <Trash2 className="h-5 w-5" /> Delete No-Photo
           </button>
         </section>
 
         <LiveStockPieChart pieData={livePieData} totalStock={totalJerseys} />
 
         <main className="grid gap-6 xl:grid-cols-2">
+          {filteredProducts.length === 0 && (
+            <section className="col-span-full rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+              <ImageIcon className="mx-auto mb-3 h-10 w-10 text-slate-400" />
+              <h2 className="text-lg font-black text-slate-800">No jerseys to show</h2>
+              <p className="mt-1 text-sm font-semibold text-slate-500">Add a jersey above or adjust the search.</p>
+            </section>
+          )}
           {filteredProducts.map((item) => {
             const safeItem = normalizeProduct(item);
             const productSizes = getSizesForPlayer(safeItem.player);
@@ -1526,61 +1536,61 @@ export default function FootballJerseyInventory() {
             const isPermanent = isPermanentPhotoProduct(safeItem);
 
             return (
-              <article key={safeItem.id} className="jersey-card overflow-hidden rounded-3xl bg-white shadow-lg">
-                <div className="grid gap-0 md:grid-cols-[220px_1fr]">
-                  <div className="flex min-h-[220px] items-center justify-center overflow-hidden bg-slate-200 p-4">
+              <article key={safeItem.id} className="jersey-card overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                <div className="grid gap-0 md:grid-cols-[180px_1fr]">
+                  <div className="flex min-h-[180px] items-center justify-center overflow-hidden bg-slate-100 p-3">
                     {safeItem.imagePreview ? (
                       <img
                         src={safeItem.imagePreview}
                         alt={`${safeItem.player} ${safeItem.team}`}
-                        className="jersey-photo h-full max-h-[260px] w-full rounded-2xl object-cover"
+                        className="jersey-photo h-full max-h-[220px] w-full rounded-md object-cover"
                       />
                     ) : (
                       <div className="text-center text-slate-500">
-                        <ImageIcon className="mx-auto mb-3 h-16 w-16" />
-                        <p className="text-xl font-black">No Picture</p>
+                        <ImageIcon className="mx-auto mb-2 h-10 w-10" />
+                        <p className="text-sm font-black">No Picture</p>
                         {safeItem.hasStoredImage && (
-                          <p className="mt-2 text-base font-bold">Saved photo will load shortly</p>
+                          <p className="mt-1 text-xs font-bold">Saved photo will load shortly</p>
                         )}
                       </div>
                     )}
                   </div>
 
-                  <div className="space-y-5 p-5 sm:p-6">
+                  <div className="space-y-4 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <input
                           value={safeItem.player}
                           onChange={(e) => updateProduct(safeItem.id, { player: e.target.value })}
-                          className="w-full border-b-2 border-transparent text-4xl font-black outline-none focus:border-slate-900"
+                          className="w-full border-b border-transparent bg-transparent text-2xl font-black outline-none focus:border-slate-900"
                         />
                         <input
                           value={safeItem.team}
                           onChange={(e) => updateProduct(safeItem.id, { team: e.target.value })}
-                          className="mt-1 w-full border-b-2 border-transparent text-2xl font-extrabold text-slate-600 outline-none focus:border-slate-900"
+                          className="mt-1 w-full border-b border-transparent bg-transparent text-base font-extrabold text-slate-500 outline-none focus:border-slate-900"
                         />
                       </div>
                       {isPermanent ? (
-                        <div className="flex items-center gap-2 rounded-2xl bg-emerald-50 px-3 py-3 text-base font-black text-emerald-700">
-                          <Lock className="h-6 w-6" /> Permanent
+                        <div className="flex items-center gap-1.5 rounded-md bg-emerald-50 px-2.5 py-2 text-xs font-black text-emerald-700">
+                          <Lock className="h-4 w-4" /> Permanent
                         </div>
                       ) : (
                         <button
                           onClick={() => deleteProduct(safeItem.id)}
-                          className="rounded-2xl bg-red-50 p-3 text-red-600 hover:bg-red-100"
+                          className="rounded-md bg-red-50 p-2 text-red-600 hover:bg-red-100"
                           aria-label="Delete product"
                         >
-                          <Trash2 className="h-7 w-7" />
+                          <Trash2 className="h-5 w-5" />
                         </button>
                       )}
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-                      <div className="rounded-2xl border-2 border-slate-200 px-4 py-3 text-2xl font-black text-slate-700">
+                    <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+                      <div className="rounded-md border border-slate-200 px-3 py-2 text-sm font-black text-slate-600">
                         {FIXED_QUALITY}
                       </div>
-                      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-slate-100 px-4 py-3 text-2xl font-black hover:bg-slate-200">
-                        <Upload className="h-7 w-7" /> Photo
+                      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-slate-100 px-3 py-2 text-sm font-black hover:bg-slate-200">
+                        <Upload className="h-5 w-5" /> Photo
                         <input
                           type="file"
                           accept="image/*"
@@ -1590,26 +1600,26 @@ export default function FootballJerseyInventory() {
                       </label>
                     </div>
 
-                    <div className="rounded-2xl bg-slate-100 p-4">
+                    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
                       <div className="mb-3 flex items-center justify-between gap-3">
-                        <p className="text-2xl font-black">Sizes & Quantity</p>
-                        <p className="rounded-full bg-slate-900 px-4 py-1 text-2xl font-black text-white">
+                        <p className="text-sm font-black uppercase text-slate-500">Sizes</p>
+                        <p className="rounded-full bg-slate-900 px-3 py-1 text-sm font-black text-white">
                           Total: {itemTotal}
                         </p>
                       </div>
-                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 2xl:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 2xl:grid-cols-4">
                         {productSizes.map((size) => {
                           const sizeQuantity = Number(safeStock[size] || 0);
 
                           return (
                             <label
                               key={size}
-                              className={`size-tile rounded-2xl p-3 text-slate-900 shadow-sm hover:-translate-y-0.5 hover:shadow-md ${
+                              className={`size-tile rounded-lg p-2 text-slate-900 shadow-sm hover:-translate-y-0.5 hover:shadow-md ${
                                 sizeQuantity === 0 ? "size-tile-empty" : ""
                               }`}
                               style={getSizeStyleVars(size)}
                             >
-                              <span className="size-label-ui block text-center text-xl font-black leading-none sm:text-2xl">
+                              <span className="size-label-ui block text-center text-base font-black leading-none sm:text-lg">
                                 {size}
                               </span>
                               <input
@@ -1617,7 +1627,7 @@ export default function FootballJerseyInventory() {
                                 min="0"
                                 value={safeStock[size] ?? 0}
                                 onChange={(e) => updateStock(safeItem.id, size, e.target.value)}
-                                className="size-input mt-2 block h-12 w-full min-w-0 rounded-xl border-2 border-slate-200 bg-white px-2 py-1 text-center text-2xl font-black leading-none text-slate-900 outline-none focus:border-slate-900 sm:h-14 sm:text-3xl"
+                                className="size-input mt-2 block h-10 w-full min-w-0 rounded-md border border-slate-200 bg-white px-2 py-1 text-center text-xl font-black leading-none text-slate-900 outline-none focus:border-slate-900"
                               />
                             </label>
                           );
